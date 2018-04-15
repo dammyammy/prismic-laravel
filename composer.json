@@ -38,7 +38,7 @@
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "extra": {
         "laravel": {
             "providers": [
