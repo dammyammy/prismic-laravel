@@ -3,6 +3,7 @@
 namespace TedbreeDigital\Prismic;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
+use Prismic\Api;
 
 class ServiceProvider extends LaravelServiceProvider
 {
@@ -22,6 +23,11 @@ class ServiceProvider extends LaravelServiceProvider
         $this->publishes([
             __DIR__.'/../stubs/views' => resource_path('views/vendor/prismic'),
         ], 'views');
+
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../stubs/config/prismic.php', 'prismic'
+        );
     }
 
 
@@ -36,16 +42,18 @@ class ServiceProvider extends LaravelServiceProvider
         \View::composer('*', \TedbreeDigital\Prismic\ViewComposers\PrismicComposer::class);
 
         $this->app->singleton('prismic', function ($app) {
-            return new Prismic();
+            $config = $app['config']['prismic'];
+            $url = $config['url'];
+            $accessToken = $config['token'];
+            $httpClient = $config['httpClient'] ? new $config['httpClient'] : null;
+            $cache = $config['cache'] ? new $config['cache'] : null;
+            // $cacheTTL = $config['cacheTTL'];
+            return Api::get($url, $accessToken, $httpClient, $cache);
         });
 
         $this->app->bind(
             \TedbreeDigital\Prismic\Contracts\LinkResolverInterface::class,
             \TedbreeDigital\Prismic\LinkResolver::class
-        );
-
-        $this->mergeConfigFrom(
-            __DIR__.'/../stubs/config/prismic.php', 'prismic'
         );
     }
 }

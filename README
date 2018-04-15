@@ -109,3 +109,68 @@ Copyright 2018 Prismic.io (https://prismic.io).
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+# Prismic.io Laravel Integration
+
+[![Build Status](https://travis-ci.org/mikkokut/prismic-laravel.svg?branch=master)](https://travis-ci.org/mikkokut/prismic-laravel)
+
+Laravel integration for the Prismic PHP development kit.
+
+[Prismic](https://prismic.io) provides one CMS Backend for all your Websites & Apps.
+
+# Setup
+
+To add this package to your `composer.json` and install it execute the following command:
+
+```bash
+php composer require mikkokut/prismic-laravel
+````
+Add the service provider to the `providers` array in config/app.php:
+
+```php
+'providers' => [
+    MikkoKut\PrismicLaravel\PrismicServiceProvider::class,
+],
+```
+
+Add the facade to the `aliases` array in config/app.php:
+```php
+'aliases' => [
+    'Prismic' => MikkoKut\PrismicLaravel\Facades\Prismic::class,
+],
+```
+
+
+## Configuration
+
+Publish the config file:
+
+```sh
+php artisan vendor:publish"
+```
+
+This will add prismic.php to your /config folder. Next, open that file and set the credentials.
+
+
+## Usage
+
+The package just initializes the <code>Api</code> class of the Prismic's php-kit package. You can use all public methods from the [Api](https://github.com/prismicio/php-kit/blob/master/src/Prismic/Api.php) using the <code>Prismic</code> facade.
+
+### Eq. Get single
+```php
+$type = 'frontpage';
+$options = [];
+$key = 'frontpage.title';
+
+$document = \Prismic::getSingle($type, $options);
+echo $document->getText($key);
+```
+
+### Available methods
+Refer [php-kit](https://github.com/prismicio/php-kit)
+
+License
+=======
+
+Copyright (c) 2017 Mikko Kutilainen. Code released under the MIT license.
